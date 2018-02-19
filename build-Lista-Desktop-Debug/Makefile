@@ -51,10 +51,14 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../Lista/main.cpp \
-		../Lista/mainwindow.cpp moc_mainwindow.cpp
+		../Lista/mainwindow.cpp \
+		../Lista/model.cpp moc_mainwindow.cpp \
+		moc_model.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
-		moc_mainwindow.o
+		model.o \
+		moc_mainwindow.o \
+		moc_model.o
 DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/common/unix.conf \
 		/usr/lib64/qt5/mkspecs/common/linux.conf \
@@ -192,6 +196,7 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib64/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib64/qt5/mkspecs/features/spec_post.prf \
+		../Lista/.qmake.stash \
 		/usr/lib64/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib64/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib64/qt5/mkspecs/features/default_pre.prf \
@@ -211,8 +216,10 @@ DIST          = /usr/lib64/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib64/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib64/qt5/mkspecs/features/yacc.prf \
 		/usr/lib64/qt5/mkspecs/features/lex.prf \
-		../Lista/Lista.pro ../Lista/mainwindow.h ../Lista/main.cpp \
-		../Lista/mainwindow.cpp
+		../Lista/Lista.pro ../Lista/mainwindow.h \
+		../Lista/model.h ../Lista/main.cpp \
+		../Lista/mainwindow.cpp \
+		../Lista/model.cpp
 QMAKE_TARGET  = Lista
 DESTDIR       = 
 TARGET        = Lista
@@ -361,6 +368,7 @@ Makefile: ../Lista/Lista.pro /usr/lib64/qt5/mkspecs/linux-g++/qmake.conf /usr/li
 		/usr/lib64/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib64/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib64/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib64/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib64/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib64/qt5/mkspecs/features/default_pre.prf \
@@ -522,6 +530,7 @@ Makefile: ../Lista/Lista.pro /usr/lib64/qt5/mkspecs/linux-g++/qmake.conf /usr/li
 /usr/lib64/qt5/mkspecs/features/qt_config.prf:
 /usr/lib64/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib64/qt5/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib64/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib64/qt5/mkspecs/features/toolchain.prf:
 /usr/lib64/qt5/mkspecs/features/default_pre.prf:
@@ -560,8 +569,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib64/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Lista/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Lista/main.cpp ../Lista/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Lista/mainwindow.h ../Lista/model.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Lista/main.cpp ../Lista/mainwindow.cpp ../Lista/model.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Lista/mainwindow.ui $(DISTDIR)/
 
 
@@ -594,13 +603,18 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib64/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -Wall -W -dM -E -o moc_predefs.h /usr/lib64/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_model.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_model.cpp
 moc_mainwindow.cpp: ../Lista/mainwindow.h \
 		moc_predefs.h \
 		/usr/lib64/qt5/bin/moc
 	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/gutoslv/Documents/Qt-Workshop/Lista -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-redhat-linux -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-redhat-linux/7/include -I/usr/local/include -I/usr/include ../Lista/mainwindow.h -o moc_mainwindow.cpp
+
+moc_model.cpp: ../Lista/model.h \
+		moc_predefs.h \
+		/usr/lib64/qt5/bin/moc
+	/usr/lib64/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib64/qt5/mkspecs/linux-g++ -I/home/gutoslv/Documents/Qt-Workshop/Lista -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/c++/7/x86_64-redhat-linux -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-redhat-linux/7/include -I/usr/local/include -I/usr/include ../Lista/model.h -o moc_model.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -628,8 +642,14 @@ mainwindow.o: ../Lista/mainwindow.cpp ../Lista/mainwindow.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Lista/mainwindow.cpp
 
+model.o: ../Lista/model.cpp ../Lista/model.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o model.o ../Lista/model.cpp
+
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_model.o: moc_model.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_model.o moc_model.cpp
 
 ####### Install
 
