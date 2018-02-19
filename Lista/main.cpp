@@ -1,11 +1,18 @@
-#include "mainwindow.h"
 #include <QApplication>
+#include <QListView>
+#include <QStringListModel>
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    QApplication app(argc, argv);
+    auto list = QStringList({"Uma", "Duas", "Três"});
 
-    return a.exec();
+    auto model = new QStringListModel();
+    model->setStringList(list);
+
+    auto view = new QListView();
+    view->setModel(model);
+    view->show();
+
+    return app.exec();
 }
